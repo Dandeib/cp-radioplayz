@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '500mb',
+      allowedOrigins: ['http://dandeib.de:3002', 'https://dandeib.de:3002'],
+    },
+  },
 };
 
 export default nextConfig;
