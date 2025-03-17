@@ -12,6 +12,7 @@ import {
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
 import { signOut } from "next-auth/react"
+import { redirect } from "next/navigation"
 
 export function AppSidebar() {
   return (
@@ -94,7 +95,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-          <button onClick={() => signOut({ redirectTo: "/"})} className="flex items-center px-2 py-1 hover:bg-accent rounded-md text-red-500">
+          <button onClick={() => {signOut(), redirect("/")}} className="flex items-center px-2 py-1 hover:bg-accent rounded-md text-red-500">
             <Users className="mr-2 h-4 w-4" />Logout
           </button>
         </SidebarFooter>
