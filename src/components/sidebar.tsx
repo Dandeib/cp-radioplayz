@@ -92,6 +92,26 @@ export function AppSidebar() {
               </CollapsibleContent>
             </SidebarMenuItem>
           </Collapsible>
+          <Collapsible defaultOpen className="group/collapsible mt-6">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton>
+                  <Code className="w-4 h-4 mr-2" />
+                  Content
+                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem >
+                    <a href="/dashboard/content/news" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <Calendar className="mr-2 h-4 w-4" />News Post
+                    </a>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
