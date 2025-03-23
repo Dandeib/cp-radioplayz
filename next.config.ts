@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       allowedOrigins: ['http://dandeib.de:3002', 'https://dandeib.de:3002'],
     },
   },
+  output: 'export',
 };
 
 export default nextConfig;
