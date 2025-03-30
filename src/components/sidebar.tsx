@@ -7,7 +7,8 @@ import {
   FileSpreadsheet,
   Mail,
   Code,
-  Radio
+  Radio,
+  Wrench
 } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
@@ -60,6 +61,11 @@ export function AppSidebar() {
                   <SidebarMenuSubItem >
                     <a href="dashboard/management/mails" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Mail className="mr-2 h-4 w-4" />Mails
+                    </a>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem >
+                    <a href="dashboard/management/maintance-mode" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <Wrench className="mr-2 h-4 w-4" />Wartungsmodus
                     </a>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>

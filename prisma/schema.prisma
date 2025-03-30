@@ -31,3 +31,8 @@ model News {
   content String
   image String?
 }
+
+model Warung {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  wartungsmode Boolean
+}

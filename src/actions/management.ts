@@ -62,3 +62,17 @@ export const resetPassword = async (userId: string) => {
 
     return result
 }
+
+export const getMantanceMode = async () => {
+    const mode = await db.warung.findUnique({ where: { id: '67e00ac3a64df1ec47ededfc'}})
+    const wartungsmode = mode?.wartungsmode!
+
+    return wartungsmode
+}
+
+export const setMantanceMode = async (mode: boolean) => {
+    await db.warung.update({
+        where: { id: '67e00ac3a64df1ec47ededfc' },
+        data: { wartungsmode: mode }
+    })
+}
