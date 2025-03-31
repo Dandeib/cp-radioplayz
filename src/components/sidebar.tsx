@@ -39,32 +39,32 @@ export function AppSidebar() {
               <CollapsibleContent>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/management/users" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/management/users" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Users className="mr-2 h-4 w-4" />Benutzerverwaltung
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/management/servers" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/management/servers" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Server className="mr-2 h-4 w-4" />Serverübersicht
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/management/bots" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/management/bots" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Bot className="mr-2 h-4 w-4" />Botverwaltung
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/management/applications" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/management/applications" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <FileSpreadsheet className="mr-2 h-4 w-4" />Bewerbung Manager
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/management/mails" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/management/mails" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Mail className="mr-2 h-4 w-4" />Mails
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/management/maintance-mode" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/management/maintance-mode" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Wrench className="mr-2 h-4 w-4" />Wartungsmodus
                     </a>
                   </SidebarMenuSubItem>
@@ -85,12 +85,12 @@ export function AppSidebar() {
               <CollapsibleContent>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/development/bots" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/development/bots" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Bot className="mr-2 h-4 w-4" />Bot verwaltung
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="dashboard/development/servers" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                    <a href="/dashboard/development/servers" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Server className="mr-2 h-4 w-4" />Server übersicht
                     </a>
                   </SidebarMenuSubItem>
