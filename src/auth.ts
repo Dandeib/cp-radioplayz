@@ -12,31 +12,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
 
-        const { username, password } = credentials as {
-          username: string;
-          password: string;
-        };
+        console.time("authorize_total");
+  const { username, password } = credentials as {
+    username: string;
+    password: string;
+  };
 
-        const user = await db.user.findFirst({
-          where: {
-            name: username
-          }
-        })
+  console.time("db_user_findFirst");
+  const user = await db.user.findFirst({
+    where: {
+      name: username
+    }
+  });
+  console.timeEnd("db_user_findFirst");
 
-        if (!user) {
-          throw new Error("Benutzername nicht gefunden")
-        }
+  if (!user) {
+    console.timeEnd("authorize_total");
+    throw new Error("Benutzername nicht gefunden");
+  }
 
-        const passwordMatch = await bcrypt.compare(
-          password,
-          user.password
-        )
+  console.time("bcrypt_compare");
+  const passwordMatch = await bcrypt.compare(
+    password,
+    user.password
+  );
+  console.timeEnd("bcrypt_compare");
 
-        if (!passwordMatch) {
-          throw new Error("Falsches Passwort")
-        }
+  if (!passwordMatch) {
+    console.timeEnd("authorize_total");
+    throw new Error("Falsches Passwort");
+  }
 
-        return user
+  console.timeEnd("authorize_total");
+  return user;
       },
     }),
   ],

@@ -16,6 +16,7 @@ export default function Page() {
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
+      password: ""
     },
   })
 

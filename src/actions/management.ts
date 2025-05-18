@@ -64,15 +64,59 @@ export const resetPassword = async (userId: string) => {
 }
 
 export const getMantanceMode = async () => {
-    const mode = await db.warung.findUnique({ where: { id: '67e00ac3a64df1ec47ededfc'}})
+    const mode = await db.wartung.findUnique({ where: { id: '6822526b0b844db0a6312283'}})
     const wartungsmode = mode?.wartungsmode!
 
     return wartungsmode
 }
 
 export const setMantanceMode = async (mode: boolean) => {
-    await db.warung.update({
-        where: { id: '67e00ac3a64df1ec47ededfc' },
+    await db.wartung.update({
+        where: { id: '6822526b0b844db0a6312283' },
         data: { wartungsmode: mode }
+    })
+}
+
+export const setMantanceModePassword = async (password: string) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await db.wartung.update({
+        where: { id: '6822526b0b844db0a6312283' },
+        data: { password: hashedPassword }
+    })
+}
+
+export const createApplication = async (title: string, description: string, image?: string) => {
+    await db.bewerbungen.create({
+        data: {
+            title,
+            description,
+            image,
+        }
+    })
+
+    return true
+}
+
+export const getAllApplications = async () => {
+    const applications = await db.bewerbungen.findMany()
+    return applications
+}
+
+export const deleteApplication = async (id: string) => {
+    await db.bewerbungen.delete({
+        where: { id }
+    })
+}
+
+export const updateApplication = async (id: string, title: string, description: string, image?: string) => {
+    await db.bewerbungen.update({
+        where: { id },
+        data: {
+            title,
+            description,
+            image
+        }
     })
 }

@@ -12,17 +12,13 @@ export default function RootLayout({
 }>) {
 
     return (
-        <html lang="en">
-            <body>
-                <SessionProvider>
-                    <SidebarProvider>
-                        <AppSidebar />
-                        <SidebarTrigger />
-                        {children}
-                        <Toaster />
-                    </SidebarProvider>
-                </SessionProvider>
-            </body>
-        </html>
+        <SessionProvider>
+            <SidebarProvider>
+                <AppSidebar />
+                <SidebarTrigger />
+                {children}
+                <Toaster />
+            </SidebarProvider>
+        </SessionProvider>
     );
 }

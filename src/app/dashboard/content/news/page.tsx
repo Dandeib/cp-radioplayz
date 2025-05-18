@@ -2,6 +2,7 @@
 import { createNews, deleteNews, getAllNews, updateNews } from "@/actions/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { News } from "@prisma/client";
 import { useEffect, useState } from "react";
@@ -17,9 +18,10 @@ export default function NewsPage() {
 
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | null>(null);
-
   const [news, setNews] = useState<News[]>([])
   const [editedPost, setEditedPost] = useState<changedPost>()
+  // State to store the original content when editing
+  const [originalContent, setOriginalContent] = useState<string>('')
 
   async function getNews() {
     const allNews = await getAllNews()
@@ -55,10 +57,22 @@ export default function NewsPage() {
 
     await updateNews(editedPost!.id, editedPost!.content, editedPost!.image)
     setEditedPost(undefined)
-
+    setOriginalContent('')
     getNews()
 
     toast.success('News erfolgreich bearbeitet')
+  }
+
+  const handleCancelEdit = () => {
+    const updatedNews = news.map(item => {
+      if (item.id === editedPost?.id) {
+        return { ...item, content: originalContent }
+      }
+      return item
+    })
+    setNews(updatedNews)
+    setEditedPost(undefined)
+    setOriginalContent('')
   }
 
   const handleDeletePost = async (id: string) => {
@@ -68,61 +82,102 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div className="w-full max-w-3xl p-8 rounded-md shadow-lg text-center">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Content"
-              required
-            />
-          </div>
-          <div>
-            <Input
-              type="file"
-              onChange={(e) => {
-                if (e.target.files) {
-                  setImage(e.target.files[0]);
-                }
-              }}
-              accept="image/*"
-            />
-          </div>
-          <Button type="submit">Posten</Button>
-        </form>
-      </div>
-
-
-      <div className="rounded-md border w-full max-w-4xl p-8 mt-16">
-        <h1 className="text-2xl font-bold mb-4 text-center">Vorherige News</h1>
-
-        <div className="bg-gray-50/2 rounded-lg shadow-lg">
-          {news.map((blog: News) => (
-            <div key={blog.id} className="shadow-lg rounded-lg bg-gray-100 p-4 mb-4">
-              <Textarea onChange={(e) => setEditedPost({ ...blog, content: e.target.value })} defaultValue={blog.content}></Textarea>
-
-              <div className="flex justify-between p-4">
-                <div>
-
-                  {editedPost?.id == blog.id && (
-                    <div>
-                      <Button className="mr-2 bg-red-500 hover:bg-red-400" onClick={() => { setEditedPost(undefined) }}>Abbrechen</Button>
-                      <Button onClick={handlePostEdit}>Speichern</Button>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <Button className="bg-red-500 hover:bg-red-400" onClick={() => { handleDeletePost(blog.id) }}>Löschen</Button>
-                </div>
-              </div>
+    <div className="container mx-auto py-8 flex items-center justify-center min-h-screen">
+      <div className="max-w-2xl w-full space-y-8">
+        {/* News Creation Section */}
+        <div className="rounded-lg border p-8 shadow-sm">
+          <div className="flex flex-col gap-4">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tight">News erstellen</h2>
+              <p className="text-muted-foreground">
+                Erstelle einen neuen News-Beitrag
+              </p>
             </div>
-          ))}
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="content">Inhalt</Label>
+                <Textarea
+                  id="content"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Schreibe hier deinen Beitrag..."
+                  className="min-h-[100px]"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="image">Bild</Label>
+                <Input
+                  id="image"
+                  type="file"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setImage(e.target.files[0]);
+                    }
+                  }}
+                  accept="image/*"
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                News erstellen
+              </Button>
+            </form>
+          </div>
+        </div>
+
+        {/* Existing News Section */}
+        <div className="rounded-lg border p-8 shadow-sm">
+          <div className="flex flex-col gap-4">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tight">Vorherige News</h2>
+              <p className="text-muted-foreground">
+                Verwalte deine bestehenden News-Beiträge
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {news.map((blog: News) => (
+                <div key={blog.id} className="rounded-lg border p-4">
+                  <div className="space-y-4">
+                    <Textarea 
+                      value={editedPost?.id === blog.id ? editedPost.content : blog.content}
+                      onChange={(e) => {
+                        if (!editedPost || editedPost.id !== blog.id) {
+                          setOriginalContent(blog.content)
+                        }
+                        setEditedPost({ ...blog, content: e.target.value })
+                      }}
+                      className="min-h-[100px]"
+                    />
+                    
+                    <div className="flex justify-between items-center">
+                      <div>
+                        {editedPost?.id === blog.id && (
+                          <div className="flex gap-2">
+                            <Button variant="outline" onClick={handleCancelEdit}>
+                              Abbrechen
+                            </Button>
+                            <Button onClick={handlePostEdit}>
+                              Speichern
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                      <Button 
+                        variant="destructive"
+                        onClick={() => handleDeletePost(blog.id)}
+                      >
+                        Löschen
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-
     </div>
   );
 }

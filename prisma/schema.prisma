@@ -20,19 +20,27 @@ enum Roles {
 }
 
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String @unique
   password String
-  role Roles
+  role     Roles
 }
 
 model News {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
   content String
-  image String?
+  image   String?
 }
 
-model Warung {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+model Wartung {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
   wartungsmode Boolean
+  password     String
+}
+
+model Bewerbungen {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  image       String?
 }

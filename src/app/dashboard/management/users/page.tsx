@@ -48,6 +48,10 @@ export default function UsersPage() {
   const handleCreateUser = async (username: string, password: string, role: Roles) => {
     await createUser({ username, password }, role);
     fetchUsers();
+
+    setUsername('')
+    setPassword('')
+    setRole('Admin')
   };
 
   const handleResetPassword = async (userId: string) => {
@@ -58,93 +62,102 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="flex justify-center w-full p-4">
-      <div className="rounded-md border w-full max-w-4xl p-8 mt-16">
-        <h1 className="text-2xl font-bold mb-4 text-center">Benutzerverwaltung</h1>
+    <div className="container mx-auto py-8 flex items-center justify-center min-h-screen">
+      <div className="max-w-4xl w-full space-y-8">
+        <div className="rounded-lg border p-8 shadow-sm">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tight">Benutzerverwaltung</h2>
+              <p className="text-muted-foreground">
+                Verwalte die Benutzer und deren Rollen
+              </p>
+            </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Username</TableHead>
-              <TableHead>Rolle</TableHead>
-              <TableHead>Aktionen</TableHead>
-              <TableHead>
-                <Popover>
-                  <PopoverTrigger>
-                    <Button
-                      className="bg-green-500 hover:bg-green-600 text-white"
-                    >
-                      Neuer Benutzer
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div className="flex flex-col gap-4">
-                      <Input
-                        type="text"
-                        placeholder="Username"
-                        onChange={(e) => setUsername(e.target.value)}
-                      />
-                      <Input
-                        type="password"
-                        placeholder="Password"
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      <Select value={role} onValueChange={(value) => setRole(value as Roles)}>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Username</TableHead>
+                  <TableHead>Rolle</TableHead>
+                  <TableHead>Aktionen</TableHead>
+                  <TableHead>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                        >
+                          Neuer Benutzer
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <div className="flex flex-col gap-4">
+                          <Input
+                            type="text"
+                            placeholder="Username"
+                            onChange={(e) => setUsername(e.target.value)}
+                          />
+                          <Input
+                            type="password"
+                            placeholder="Password"
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                          <Select value={role} onValueChange={(value) => setRole(value as Roles)}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Admin">Admin</SelectItem>
+                              <SelectItem value="Developer">Developer</SelectItem>
+                              <SelectItem value="Content">Content</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Button
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
+                            onClick={() => handleCreateUser(username, password, role)}
+                          >
+                            Erstellen
+                          </Button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.name}</TableCell>
+                    <TableCell>
+                      <Select value={user.role} onValueChange={(value) => handleRoleChange(user.id, value as Roles)}>
                         <SelectTrigger className="w-[180px]">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent defaultValue={role}>
-                          <SelectItem value="Admin" className={role === 'Admin' ? 'bg-gray-200' : ''}>Admin</SelectItem>
-                          <SelectItem value="Developer" className={role === 'Developer' ? 'bg-gray-200' : ''}>Developer</SelectItem>
-                          <SelectItem value="Content" className={role === 'Content' ? 'bg-gray-200' : ''}>Content</SelectItem>
+                        <SelectContent>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                          <SelectItem value="Developer">Developer</SelectItem>
+                          <SelectItem value="Content">Content</SelectItem>
                         </SelectContent>
                       </Select>
+                    </TableCell>
+                    <TableCell className="flex gap-2">
                       <Button
-                        className="bg-green-500 hover:bg-green-600 text-white"
-                        onClick={() => handleCreateUser(username, password, role)}
+                        variant="destructive"
+                        onClick={() => handleDeleteUser(user.id)}
                       >
-                        Erstellen
+                        Löschen
                       </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>
-                  <Select value={user.role} onValueChange={(value) => handleRoleChange(user.id, value as Roles)}>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent defaultValue={user.role}>
-                      <SelectItem value="Admin" className={user.role === 'Admin' ? 'bg-gray-200' : ''}>Admin</SelectItem>
-                      <SelectItem value="Developer" className={user.role === 'Developer' ? 'bg-gray-200' : ''}>Developer</SelectItem>
-                      <SelectItem value="Content" className={user.role === 'Content' ? 'bg-gray-200' : ''}>Content</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-                <TableCell className="flex gap-2">
-                  <Button
-                    className="bg-red-500 hover:bg-red-600 text-white"
-                    onClick={() => handleDeleteUser(user.id)}
-                  >
-                    Löschen
-                  </Button>
-                  <Button
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                    onClick={() => handleResetPassword(user.id)}
-                  >
-                    Passwort zurücksetzen
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                      <Button
+                        variant="secondary"
+                        onClick={() => handleResetPassword(user.id)}
+                      >
+                        Passwort zurücksetzen
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       </div>
     </div>
   );

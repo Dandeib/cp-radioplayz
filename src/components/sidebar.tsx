@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Calendar,
   ChevronDown,
@@ -44,16 +46,6 @@ export function AppSidebar() {
                     </a>
                   </SidebarMenuSubItem>
                   <SidebarMenuSubItem >
-                    <a href="/dashboard/management/servers" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
-                      <Server className="mr-2 h-4 w-4" />Serverübersicht
-                    </a>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem >
-                    <a href="/dashboard/management/bots" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
-                      <Bot className="mr-2 h-4 w-4" />Botverwaltung
-                    </a>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem >
                     <a href="/dashboard/management/applications" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <FileSpreadsheet className="mr-2 h-4 w-4" />Bewerbung Manager
                     </a>
@@ -84,16 +76,6 @@ export function AppSidebar() {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  <SidebarMenuSubItem >
-                    <a href="/dashboard/development/bots" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
-                      <Bot className="mr-2 h-4 w-4" />Bot verwaltung
-                    </a>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem >
-                    <a href="/dashboard/development/servers" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
-                      <Server className="mr-2 h-4 w-4" />Server übersicht
-                    </a>
-                  </SidebarMenuSubItem>
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>
