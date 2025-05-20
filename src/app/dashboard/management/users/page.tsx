@@ -22,7 +22,7 @@ export default function UsersPage() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<Roles>('Admin');
+  const [role, setRole] = useState<Roles>('Management');
 
   const [users, setUsers] = useState<UserType[]>([]);
 
@@ -51,7 +51,7 @@ export default function UsersPage() {
 
     setUsername('')
     setPassword('')
-    setRole('Admin')
+    setRole('Management')
   };
 
   const handleResetPassword = async (userId: string) => {
@@ -105,9 +105,11 @@ export default function UsersPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Admin">Admin</SelectItem>
-                              <SelectItem value="Developer">Developer</SelectItem>
+                              <SelectItem value="Management">Management</SelectItem>
+                              <SelectItem value="Development">Development</SelectItem>
                               <SelectItem value="Content">Content</SelectItem>
+                              <SelectItem value="Moderation">Moderation</SelectItem>
+                              <SelectItem value="Support">Support</SelectItem>
                             </SelectContent>
                           </Select>
                           <Button
@@ -132,9 +134,11 @@ export default function UsersPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Admin">Admin</SelectItem>
-                          <SelectItem value="Developer">Developer</SelectItem>
+                          <SelectItem value="Management">Management</SelectItem>
+                          <SelectItem value="Development">Development</SelectItem>
                           <SelectItem value="Content">Content</SelectItem>
+                          <SelectItem value="Moderation">Moderation</SelectItem>
+                          <SelectItem value="Support">Support</SelectItem>
                         </SelectContent>
                       </Select>
                     </TableCell>

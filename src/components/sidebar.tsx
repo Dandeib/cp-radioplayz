@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Cast,
   Calendar,
   ChevronDown,
   Users,
@@ -10,7 +11,7 @@ import {
   Mail,
   Code,
   Radio,
-  Wrench
+  Wrench,
 } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
@@ -20,7 +21,7 @@ import { redirect } from "next/navigation"
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="bg-gray-200">
         <div className="p-4 border-b">
           <div className="flex items-center gap-2">
             <img src="/logo.png" className="w-6 h-6" />
@@ -84,7 +85,7 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton>
-                  <Code className="w-4 h-4 mr-2" />
+                  <Cast className="w-4 h-4 mr-2" />
                   Content
                   <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </SidebarMenuButton>
@@ -94,6 +95,11 @@ export function AppSidebar() {
                   <SidebarMenuSubItem >
                     <a href="/dashboard/content/news" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                       <Calendar className="mr-2 h-4 w-4" />News Post
+                    </a>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem >
+                    <a href="/dashboard/content/kalender" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <Calendar className="mr-2 h-4 w-4" />Postplaner
                     </a>
                   </SidebarMenuSubItem>
                 </SidebarMenuSub>

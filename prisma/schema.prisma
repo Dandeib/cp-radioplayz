@@ -14,9 +14,18 @@ datasource db {
 }
 
 enum Roles {
-  Admin
-  Developer
+  Management
+  Development
   Content
+  Moderation
+  Support
+}
+
+enum ScheduledPostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
 }
 
 model User {
@@ -43,4 +52,17 @@ model Bewerbungen {
   title       String
   description String
   image       String?
+}
+
+model ScheduledPost {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  scheduledAt DateTime
+  status      ScheduledPostStatus @default(DRAFT)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  // Optional: Beziehung zu einem User, falls Posts einem Autor zugeordnet werden sollen
+  // author      User?               @relation(fields: [authorId], references: [id])
+  // authorId    String?             @db.ObjectId
 }
