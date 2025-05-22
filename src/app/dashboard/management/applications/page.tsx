@@ -7,13 +7,14 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { createApplication, getAllApplications, updateApplication, deleteApplication } from "@/actions/management"
+import { createApplication, getAllApplications, updateApplication, deleteApplication, setArchived } from "@/actions/management"
 
 interface Application {
   id: string
   title: string
   description: string
   image: string | null
+  archived: boolean
 }
 
 export default function ApplicationsPage() {
@@ -86,9 +87,19 @@ export default function ApplicationsPage() {
     }
   }
 
+  const handleSetArchiveStatus = async (id: string, newArchivedStatus: boolean) => {
+    try {
+      await setArchived(id, newArchivedStatus)
+      await fetchApplications()
+      toast.success(`Bewerbung erfolgreich ${newArchivedStatus ? 'archiviert' : 'wiederhergestellt'}`)
+    } catch (error) {
+      toast.error('Fehler beim Aktualisieren des Archivstatus')
+    }
+  }
+
   return (
     <div className="container mx-auto py-8 flex items-center justify-center min-h-screen">
-      <div className="max-w-2xl w-full space-y-8">
+      <div className="max-w-6xl w-full space-y-8">
         {/* Application Creation Section */}
         <div className="rounded-lg border p-8 shadow-sm">
           <div className="flex flex-col gap-4">
@@ -150,27 +161,52 @@ export default function ApplicationsPage() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {applications.map((application) => (
-                <div key={application.id} className="rounded-lg border p-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-lg font-semibold">{application.title}</h3>
-                    </div>
-                    <p className="text-muted-foreground">{application.description}</p>
-                    {application.image && (
-                      <img 
-                        src={application.image} 
-                        alt={application.title}
-                        className="mt-2 rounded-md max-h-40 object-cover"
-                      />
+                <div 
+                  key={application.id} 
+                  className={`rounded-lg border text-card-foreground shadow-sm flex flex-col h-full min-h-[540px] transition-all duration-200 hover:shadow-lg ${application.archived ? 'opacity-70 bg-gray-100' : 'bg-card'}`}
+                >
+                  <div className="p-6 flex-grow flex flex-col">
+                    {application.image ? (
+                      <div className="aspect-video w-full rounded-md mb-6">
+                        <img
+                          src={application.image}
+                          alt={application.title}
+                          className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-video w-full flex items-center justify-center bg-muted rounded-md mb-6">
+                        <span className="text-sm text-muted-foreground">Kein Bild</span>
+                      </div>
                     )}
-                    <div className="flex justify-end gap-2 mt-4">
-                      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                        <DialogTrigger asChild>
+                    <div className="space-y-1.5 flex-grow">
+                      <h3 className="text-xl font-semibold tracking-tight mb-3">{application.title}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-3">
+                        {application.description}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center text-center p-3 mt-auto border-t">
+                    <div className="flex justify-end gap-2 w-full">
+                      <Dialog open={editingApplication?.id === application.id && isDialogOpen}
+                              onOpenChange={(open) => {
+                                if (!open && !application.archived) {
+                                  setEditingApplication(null);
+                                }
+                                setIsDialogOpen(open);
+                              }}>
+                        <DialogTrigger asChild disabled={application.archived}>
                           <Button
                             variant="outline"
-                            onClick={() => setEditingApplication(application)}
+                            disabled={application.archived}
+                            onClick={() => {
+                              if (!application.archived) {
+                                setEditingApplication(application);
+                                setIsDialogOpen(true);
+                              }
+                            }}
                           >
                             Bearbeiten
                           </Button>
@@ -202,7 +238,7 @@ export default function ApplicationsPage() {
                                   description: e.target.value
                                 } : null)}
                                 placeholder="Beschreibung der Bewerbung"
-                                className="min-h-[150px]"
+                                className="min-h-[100px]"
                               />
                             </div>
                             <div className="space-y-2">
@@ -217,26 +253,23 @@ export default function ApplicationsPage() {
                                 placeholder="https://example.com/image.jpg"
                               />
                             </div>
-                          </div>
-                          <div className="flex justify-end gap-2">
-                            <Button
-                              variant="outline"
-                              onClick={() => {
-                                setIsDialogOpen(false)
-                                setEditingApplication(null)
-                              }}
-                            >
-                              Abbrechen
-                            </Button>
-                            <Button onClick={handleEdit}>
-                              Speichern
+                            <Button onClick={handleEdit} className="w-full">
+                              Änderungen speichern
                             </Button>
                           </div>
                         </DialogContent>
                       </Dialog>
-                      <Button 
+                      <Button
+                        variant={application.archived ? "secondary" : "default"}
+                        className={!application.archived ? "bg-yellow-500 hover:bg-yellow-400 text-white" : "bg-green-500 hover:bg-green-400 text-white text-xs"}
+                        onClick={() => handleSetArchiveStatus(application.id, !application.archived)}
+                      >
+                        {application.archived ? 'Wiederherstellen' : 'Archivieren'}
+                      </Button>
+                      <Button
                         variant="destructive"
                         onClick={() => handleDelete(application.id)}
+                        disabled={application.archived}
                       >
                         Löschen
                       </Button>

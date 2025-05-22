@@ -120,3 +120,15 @@ export const updateApplication = async (id: string, title: string, description: 
         }
     })
 }
+
+export const setArchived = async (id: string, archived: boolean) => {
+
+    await db.bewerbungen.update({
+        where: {
+            id
+        },
+        data: {
+            archived
+        }
+    })
+}

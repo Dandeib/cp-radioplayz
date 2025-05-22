@@ -52,6 +52,7 @@ model Bewerbungen {
   title       String
   description String
   image       String?
+  archived    Boolean @default(false)
 }
 
 model ScheduledPost {
