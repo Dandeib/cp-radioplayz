@@ -14,7 +14,8 @@ import {
   Wrench,
   Cloud,
   ShieldCheck, // Added for Moderation
-  LifeBuoy,    // Added for Support
+  LifeBuoy,
+  Users2Icon,    // Added for Support
 } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
@@ -52,6 +53,26 @@ export function AppSidebar() {
         </div>
 
         <SidebarMenu>
+        <Collapsible defaultOpen className="group/collapsible">
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <Users2Icon className="w-4 h-4 mr-2" />
+                    Team
+                    <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem >
+                      <a href="/dashboard/team/cloud" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                        <Cloud className="mr-2 h-4 w-4" />Cloud
+                      </a>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
           {(userRole === "Management") && (
             <Collapsible defaultOpen className="group/collapsible">
               <SidebarMenuItem>
@@ -82,11 +103,6 @@ export function AppSidebar() {
                     <SidebarMenuSubItem >
                       <a href="/dashboard/management/maintance-mode" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
                         <Wrench className="mr-2 h-4 w-4" />Wartungsmodus
-                      </a>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem >
-                      <a href="/dashboard/management/cloud" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
-                        <Cloud className="mr-2 h-4 w-4" />Cloud
                       </a>
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
