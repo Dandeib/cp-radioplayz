@@ -5,17 +5,19 @@ import {
   Calendar,
   ChevronDown,
   Users,
-  Server,
-  Bot,
   FileSpreadsheet,
   Mail,
   Code,
-  Radio,
   Wrench,
-  Cloud,
-  ShieldCheck, // Added for Moderation
   LifeBuoy,
-  Users2Icon,    // Added for Support
+  Cloud,
+  UserX,
+  ClipboardList,
+  CalendarDays,
+  AlertTriangle,
+  ShieldCheck, 
+  Users2Icon,
+  LogOut,
 } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
@@ -53,26 +55,6 @@ export function AppSidebar() {
         </div>
 
         <SidebarMenu>
-        <Collapsible defaultOpen className="group/collapsible">
-              <SidebarMenuItem>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton>
-                    <Users2Icon className="w-4 h-4 mr-2" />
-                    Team
-                    <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem >
-                      <a href="/dashboard/team/cloud" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
-                        <Cloud className="mr-2 h-4 w-4" />Cloud
-                      </a>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
           {(userRole === "Management") && (
             <Collapsible defaultOpen className="group/collapsible">
               <SidebarMenuItem>
@@ -200,13 +182,46 @@ export function AppSidebar() {
             </Collapsible>
           )}
 
+          <Collapsible defaultOpen className="group/collapsible mt-6">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton>
+                  <Users2Icon className="w-4 h-4 mr-2" />
+                  Team
+                  <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem >
+                    <a href="/dashboard/team/cloud" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <Cloud className="mr-2 h-4 w-4" />Cloud
+                    </a>
+                    <a href="/dashboard/team/abwesendheit" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <UserX className="mr-2 h-4 w-4" />Abwesendheit
+                    </a>
+                    <a href="/dashboard/team/zuständigkeiten" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <ClipboardList className="mr-2 h-4 w-4" />Zuständigkeiten
+                    </a>
+                    <a href="/dashboard/team/kalender" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <CalendarDays className="mr-2 h-4 w-4" />Kalender
+                    </a>
+                    <a href="/dashboard/team/wichtiges" className="flex items-center px-2 py-1 hover:bg-accent rounded-md">
+                      <AlertTriangle className="mr-2 h-4 w-4" />Wichtiges
+                    </a>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
+
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
-          <button onClick={() => {signOut({ callbackUrl: '/' })}} className="flex items-center px-2 py-1 hover:bg-accent rounded-md text-red-500 w-full">
-            <Users className="mr-2 h-4 w-4" />Logout
-          </button>
-        </SidebarFooter>
+      <SidebarFooter className="bg-gray-200">
+        <button onClick={() => { signOut({ callbackUrl: '/' }) }} className="flex items-center px-4 py-3 bg-white hover:bg-red-500 hover:text-white rounded-md text-red-500 w-full transition-colors duration-150">
+          <LogOut className="mr-2 h-5 w-5" />Logout
+        </button>
+      </SidebarFooter>
     </Sidebar>
   )
 }

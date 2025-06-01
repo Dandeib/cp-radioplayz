@@ -7,7 +7,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessa
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { loginSchema } from "@/lib/zod"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 
 export default function Page() {
@@ -26,9 +26,18 @@ export default function Page() {
     redirect("/dashboard")
   }
 
+  const { data: session } = useSession()
+
+  if (session?.user?.id) {
+    redirect("/dashboard")
+  }
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-[400px] rounded-lg shadow-lg p-8">
+        <div className="flex items-center justify-center mb-8">
+          <img src="/logo.png" alt="logo" />
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -40,9 +49,6 @@ export default function Page() {
                   <FormControl>
                     <Input placeholder="username" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Gib dein Username ein.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -56,14 +62,11 @@ export default function Page() {
                   <FormControl>
                     <Input type="password" placeholder="passwort" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Gib dein Passwort ein.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Anmelden</Button>
           </form>
         </Form>
       </div>
