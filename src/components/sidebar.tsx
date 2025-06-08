@@ -15,14 +15,17 @@ import {
   ClipboardList,
   CalendarDays,
   AlertTriangle,
-  ShieldCheck, 
+  ShieldCheck,
   Users2Icon,
   LogOut,
+  Settings
 } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
 import { signOut, useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
+import { DropdownMenu, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "./ui/dropdown-menu";
 
 export function AppSidebar() {
 
@@ -47,13 +50,12 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent className="bg-gray-200">
-        <div className="p-4 border-b">
+        <div className="p-4 border-gray-300">
           <div className="flex items-center gap-2">
             <img src="/logo.png" className="w-6 h-6" />
             <span className="text-xl font-bold">Radio<span className="text-[#00b37f]">Playz</span></span>
           </div>
         </div>
-
         <SidebarMenu>
           {(userRole === "Management") && (
             <Collapsible defaultOpen className="group/collapsible">
@@ -218,9 +220,30 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="bg-gray-200">
-        <button onClick={() => { signOut({ callbackUrl: '/' }) }} className="flex items-center px-4 py-3 bg-white hover:bg-red-500 hover:text-white rounded-md text-red-500 w-full transition-colors duration-150">
-          <LogOut className="mr-2 h-5 w-5" />Logout
-        </button>
+        <DropdownMenu>
+          {session?.user?.name && session?.user?.role && (
+            <div className="p-4 border-t border-gray-300">
+              <div className="bg-white p-4 rounded-lg flex justify-between items-center">
+                <div>
+                  <p className="text-sm font-semibold truncate" title={session.user.name}>{session.user.name}</p>
+                  <p className="text-xs text-gray-500 capitalize">{session.user.role}</p>
+                </div>
+                <div className="flex items-center justify-center">
+                  <DropdownMenuTrigger className="transition-transform duration-150 ease-in-out hover:scale-110"><Settings /></DropdownMenuTrigger>
+                  <DropdownMenuContent align="center" sideOffset={8} className="w-56">
+                  <DropdownMenuLabel>Mein Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={() => {}}>Einstellungen</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => signOut({ callbackUrl: '/' })} className="text-red-600 focus:text-red-600 focus:bg-red-50">
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+                </div>
+
+              </div>
+            </div>
+          )}
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   )
