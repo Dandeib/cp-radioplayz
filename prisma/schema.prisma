@@ -28,11 +28,20 @@ enum ScheduledPostStatus {
   ARCHIVED
 }
 
+enum AbsenceRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   name     String @unique
   password String
   role     Roles
+
+  requestedAbsences AbsenceRequest[] @relation("RequestedAbsences")
+  handledAbsences   AbsenceRequest[] @relation("HandledAbsences")
 }
 
 model News {
@@ -66,4 +75,23 @@ model ScheduledPost {
   // Optional: Beziehung zu einem User, falls Posts einem Autor zugeordnet werden sollen
   // author      User?               @relation(fields: [authorId], references: [id])
   // authorId    String?             @db.ObjectId
+}
+
+model AbsenceRequest {
+  id               String               @id @default(auto()) @map("_id") @db.ObjectId
+  startDate        DateTime
+  endDate          DateTime
+  reason           String?
+  status           AbsenceRequestStatus @default(PENDING)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  requestedById    String               @db.ObjectId
+  requestedBy      User                 @relation("RequestedAbsences", fields: [requestedById], references: [id])
+
+  approvedOrRejectedById String?              @db.ObjectId
+  approvedOrRejectedBy   User?                @relation("HandledAbsences", fields: [approvedOrRejectedById], references: [id])
+
+  @@index([requestedById])
+  @@index([approvedOrRejectedById])
 }
