@@ -13,38 +13,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
 
         console.time("authorize_total");
-  const { username, password } = credentials as {
-    username: string;
-    password: string;
-  };
+        const { username, password } = credentials as {
+          username: string;
+          password: string;
+        };
 
-  console.time("db_user_findFirst");
-  const user = await db.user.findFirst({
-    where: {
-      name: username
-    }
-  });
-  console.timeEnd("db_user_findFirst");
+        console.time("db_user_findFirst");
+        const user = await db.user.findFirst({
+          where: {
+            name: username
+          }
+        });
+        console.timeEnd("db_user_findFirst");
 
-  if (!user) {
-    console.timeEnd("authorize_total");
-    throw new Error("Benutzername nicht gefunden");
-  }
+        if (!user) {
+          console.timeEnd("authorize_total");
+          throw new Error("Benutzername nicht gefunden");
+        }
 
-  console.time("bcrypt_compare");
-  const passwordMatch = await bcrypt.compare(
-    password,
-    user.password
-  );
-  console.timeEnd("bcrypt_compare");
+        console.time("bcrypt_compare");
+        const passwordMatch = await bcrypt.compare(
+          password,
+          user.password
+        );
+        console.timeEnd("bcrypt_compare");
 
-  if (!passwordMatch) {
-    console.timeEnd("authorize_total");
-    throw new Error("Falsches Passwort");
-  }
+        if (!passwordMatch) {
+          console.timeEnd("authorize_total");
+          throw new Error("Falsches Passwort");
+        }
 
-  console.timeEnd("authorize_total");
-  return user;
+        console.timeEnd("authorize_total");
+        return user;
       },
     }),
   ],
@@ -59,12 +59,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token
     },
-    session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
+    async session({ session, token }) {
+      if (token && typeof token.id === 'string') {
+
+        const baseUrl = process.env.NEXTAUTH_URL;
+        const response = await fetch(`${baseUrl}/api/session?userId=${token.id}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          session.user.role = data;
+          session.user.id = token.id as string 
+        }else {
+          console.error(`Failed to fetch user details from /api/session for user ${token.id}. Status: ${response.status}. Signing out.`);
+          await signOut({ redirect: false });
+          throw new Error("Session validation failed, user signed out.");
+        }
+
       }
-      return session
+      return session;
     },
   },
 })

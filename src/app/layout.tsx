@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
-import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -27,21 +24,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const session = await auth();
-  
-  if (session?.user?.id) {
-    const user = await db.user.findUnique({
-      where: {
-        id: session.user.id
-      }
-    });
-    
-    if (!user) {
-      redirect('/api/auth/signout');
-    }
-  }
-
   return (
     <html lang="en">
       <body
